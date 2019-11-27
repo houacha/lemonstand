@@ -8,15 +8,15 @@ namespace lemonadestand
 {
     public class Inventory
     {
-        public static Cups cup = new Cups(.25, 0);
-        public static Sugar sugar = new Sugar(.01, 0);
-        public static Ice ice = new Ice(.01, 1);
-        public static Lemon lemon = new Lemon(.55, 30);
+        public static Cups cup = new Cups(.25, 0, 8);
+        public static Sugar sugar = new Sugar(.01, 0, 1);
+        public static Ice ice = new Ice(.01, 7, 1);
+        public static Lemon lemon = new Lemon(.55, 30, 2);
         public List<Item> allItems = new List<Item> { lemon, ice, sugar, cup };
-        public List<Lemon> lemons = new List<Lemon>() { };
-        public List<Ice> iceCubes = new List<Ice>() { };
-        public List<Sugar> sugarCubes = new List<Sugar> { };
-        public List<Cups> cups = new List<Cups> { };
+        public List<Item> lemons = new List<Item>() { };
+        public List<Item> iceCubes = new List<Item>() { };
+        public List<Item> sugarCubes = new List<Item> { };
+        public List<Item> cups = new List<Item> { };
         public void AddLemons()
         {
             for (int i = 0; i < lemon.amount; i++)
@@ -43,6 +43,17 @@ namespace lemonadestand
             for (int i = 0; i < cup.amount; i++)
             {
                 cups.Add(cup);
+            }
+        }
+        public void SpoilCounter(int temp)
+        {
+            foreach (var item in lemons)
+            {
+                lemon.spoilage -= temp;
+            }
+            foreach (var item in iceCubes)
+            {
+                ice.spoilage -= temp;
             }
         }
     }

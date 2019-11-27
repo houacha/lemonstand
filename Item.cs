@@ -12,5 +12,12 @@ namespace lemonadestand
         public int amount;
         public double price;
         public int spoilage;
+        public void Spoiled(Item item, List<Item> currentItems)
+        {
+            if (spoilage <= 0)
+            {
+                currentItems.Remove(item);
+            }
+        }
     }
 }

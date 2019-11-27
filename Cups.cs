@@ -8,9 +8,11 @@ namespace lemonadestand
 {
     public class Cups:Item
     {
-        public Cups(double price, int spoil)
+        public int ounces;
+        public Cups(double price, int spoil, int ounces)
         {
-            this.spoilage = spoil;
+            this.ounces = ounces;
+            spoilage = spoil;
             this.price = price;
             name = "red solo cup";
         }

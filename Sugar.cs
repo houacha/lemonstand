@@ -8,10 +8,12 @@ namespace lemonadestand
 {
     public class Sugar:Item
     {
-        public Sugar(double price, int spoil)
+        public int sweetness;
+        public Sugar(double price, int spoil, int sweetness)
         {
+            this.sweetness = sweetness;
             this.price = price;
-            this.spoilage = spoil;
+            spoilage = spoil;
             name = "sugar cubes";
         }
     }

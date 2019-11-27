@@ -36,11 +36,23 @@ namespace lemonadestand
                     {
                         Console.WriteLine("You thought to yourself that it would be better if you don't have any " + player.inventory.allItems[i].name + ".");
                         Console.ReadLine();
+                        player.inventory.allItems[i].amount = 0;
                     }
                 }
             }
             else
             {
+            }
+        }
+        public void AddItems(Player player)
+        {
+            player.inventory.AddIce();
+            player.inventory.AddCups();
+            player.inventory.AddLemons();
+            player.inventory.AddSugar();
+            for (int i = 0; i < player.inventory.allItems.Count; i++)
+            {
+                player.inventory.allItems[i].amount = 0;
             }
         }
     }

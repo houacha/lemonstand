@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace lemonadestand
 {
-    public class Rain:Weather
+    public class Foggy:Weather
     {
-        public Rain()
+        public Foggy()
         {
-            name = "rainy";
+            name = "foggy";
         }
         public override void RandomTemp()
         {
             rngNum = new Random();
-            temp = rngNum.Next(40, 70);
+            temp = rngNum.Next(28, 60);
         }
     }
 }

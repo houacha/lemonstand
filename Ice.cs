@@ -8,10 +8,12 @@ namespace lemonadestand
 {
     public class Ice:Item
     {
-        public Ice(double price, int spoil)
+        public int coldness;
+        public Ice(double price, int spoil, int cold)
         {
+            coldness = cold;
             this.price = price;
-            this.spoilage = spoil;
+            spoilage = spoil;
             name = "ice cubes";
         }
     }

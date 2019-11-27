@@ -53,7 +53,7 @@
     <Compile Include="Lemon.cs" />
     <Compile Include="Cloudy.cs" />
     <Compile Include="Sunny.cs" />
-    <Compile Include="Snow.cs" />
+    <Compile Include="Foggy.cs" />
     <Compile Include="Rain.cs" />
     <Compile Include="UserInterface.cs" />
     <Compile Include="Day.cs" />

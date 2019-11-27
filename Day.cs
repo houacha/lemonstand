@@ -10,15 +10,12 @@ namespace lemonadestand
     {
         public Player player1 = new Player();
         public Store store = new Store();
-        public void ShowPlayerCash()
-        {
-            Console.WriteLine("You have this much money. $" + player1.wallet.cash);
-            Console.ReadLine();
-        }
         public void RunDay()
         {
-            ShowPlayerCash();
+            player1.ShowPlayerCash();
             UserInterface.GoToStore(player1.inventory,store,player1);
+            store.AddItems(player1);
+            player1.CheckInventory();
         }
     }
 }
