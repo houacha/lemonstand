@@ -16,6 +16,8 @@ namespace lemonadestand
             UserInterface.GoToStore(player1.inventory,store,player1);
             store.AddItems(player1);
             player1.CheckInventory();
+            player1.CheckSpoil();
+            UserInterface.MakeRecipe(player1);
         }
     }
 }
