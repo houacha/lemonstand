@@ -28,15 +28,17 @@ namespace lemonadestand
             }
             if (player.repromptItems.Count > 0)
             {
+                Console.WriteLine("You thought it would be a good idea to try and buy less of the items that you put away.");
+                Console.ReadLine();
                 for (int i = 0; i < player.repromptItems.Count; i++)
                 {
-                    double cost = player.inventory.allItems[i].price;
-                    UserInterface.HowMuch(player.inventory.allItems[i].name, player.inventory.allItems[i], player, cost);
+                    double cost = player.repromptItems[i].price;
+                    UserInterface.HowMuch(player.repromptItems[i].name, player.repromptItems[i], player, cost);
                     if (player.hasEnoughMoney == false)
                     {
-                        Console.WriteLine("You thought to yourself that it would be better if you don't have any " + player.inventory.allItems[i].name + ".");
+                        Console.WriteLine("You thought to yourself that it would be better if you don't have any " + player.repromptItems[i].name + ".");
                         Console.ReadLine();
-                        player.inventory.allItems[i].amount = 0;
+                        player.repromptItems[i].amount = 0;
                     }
                 }
             }

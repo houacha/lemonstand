@@ -12,10 +12,10 @@ namespace lemonadestand
         {
             name = "cloudy";
         }
-        public override void RandomTemp()
+        public override void RandomTemp(int rng)
         {
-            rngNum = new Random();
-            temp = rngNum.Next(45, 75);
+            temp = rng;
+
         }
     }
 }

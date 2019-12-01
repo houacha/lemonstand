@@ -8,14 +8,35 @@ namespace lemonadestand
 {
     public class Rain:Weather
     {
+        public int percentOfHappening;
+        public bool isRaining = false;
+        public static List<int> listOfPercent = new List<int>() { };
         public Rain()
         {
             name = "rainy";
         }
-        public override void RandomTemp()
+        public override void RandomTemp(int rng)
         {
-            rngNum = new Random();
-            temp = rngNum.Next(40, 70);
+            temp = rng;
+
+        }
+        public void SetPercentRainy(int rng)
+        {
+            percentOfHappening = rng;
+            listOfPercent.Add(percentOfHappening);
+        }
+        public void IsRaining(int rng)
+        {
+            int raining = rng;
+            if (raining <= listOfPercent[0])
+            {
+                isRaining = true;
+                listOfPercent.RemoveAt(0);
+            }
+            else
+            {
+                listOfPercent.RemoveAt(0);
+            }
         }
     }
 }

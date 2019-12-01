@@ -8,17 +8,21 @@ namespace lemonadestand
 {
     class Customers
     {
-        public Weather weather = new Weather();
-        public int cash;
-        public string prefrence;
-        public string name;
-        public List<Customers> customerList = new List<Customers>();
-        public void ForecastPreference(List<Customers> customers)
+        public double cash;
+        public int tempPreference;
+        public double costPreference;
+        public int thirst;
+        public Random range = new Random();
+        //public string name;
+        //public List<string> nameList = new List<string>() { };
+        public Customers()
         {
-            for (int i = 0; i < customers.Count ; i++)
-            {
-
-            }
+            thirst = range.Next(101);
+            //int nameIndex = range.Next(nameList.Count);
+            //name = nameList[nameIndex];
+            cash = Convert.ToDouble(range.Next(6));
+            tempPreference = range.Next(101);
+            costPreference = range.Next(3);
         }
     }
 }

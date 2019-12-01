@@ -8,13 +8,17 @@ namespace lemonadestand
 {
     public class Pitcher
     {
-        public int coldness;
-        public int sweetnessLevel;
+        public int coldness = 0;
+        public double sweetnessLevel = 0;
         public double pricePerCup;
-        public int lemonadeLeft;
+        public int lemonadeLeft = 60;
         public void DetermineSweetness(Player player)
         {
-            sweetnessLevel = (player.recipe.sugarCubes * player.inventory.sugar.sweetness) - (player.recipe.lemons * player.inventory.lemon.sourness);
+            sweetnessLevel = (player.recipe.sugarCubes * Inventory.sugar.sweetness) - (player.recipe.lemons * Inventory.lemon.sourness);
+        }
+        public void DetermineColdness(Player player)
+        {
+            coldness = player.recipe.iceCubes * Inventory.ice.coldness;
         }
     }
 }

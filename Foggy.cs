@@ -8,14 +8,15 @@ namespace lemonadestand
 {
     public class Foggy:Weather
     {
+
         public Foggy()
         {
             name = "foggy";
         }
-        public override void RandomTemp()
+        public override void RandomTemp(int rng)
         {
-            rngNum = new Random();
-            temp = rngNum.Next(28, 60);
+            temp = rng;
+
         }
     }
 }

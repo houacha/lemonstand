@@ -21,8 +21,8 @@ namespace lemonadestand
         public void AddToRecipe()
         {
             recipeItems.Add("lemon");
-            recipeItems.Add("sugar");
             recipeItems.Add("ice");
+            recipeItems.Add("sugar");
         }
         public void AddLemons()
         {
@@ -52,7 +52,7 @@ namespace lemonadestand
                 cups.Add(cup);
             }
         }
-        public void SpoilCounter(int temp)
+        public void SpoiledByTemp(int temp)
         {
             foreach (var item in lemons)
             {

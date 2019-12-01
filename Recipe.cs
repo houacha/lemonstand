@@ -13,6 +13,7 @@ namespace lemonadestand
         public int sugarCubes;
         public List<string> theMix = new List<string>(){};
         public double priceOfLemonade;
+        public int water;
         public void CountItemsInMix()
         {
             for (int i = 0; i < theMix.Count; i++)
