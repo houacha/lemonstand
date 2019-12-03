@@ -26,7 +26,7 @@ namespace lemonadestand
                 Console.Clear();
                 Console.WriteLine("What do you want to charge people?");
                 input = Console.ReadLine();
-            } while (Double.TryParse(input, out double result) == false);
+            } while (Double.TryParse(input, out double result) == false || result < 0);
             player.pitcher.pricePerCup = Convert.ToDouble(input);
             if (Convert.ToDouble(input) < 0)
             {
@@ -131,7 +131,7 @@ namespace lemonadestand
                 Console.Clear();
                 Console.WriteLine("How many " + loop + " do you want to put in?");
                 recipeAmount = Console.ReadLine();
-            } while (Int32.TryParse(recipeAmount, out int result) == false || Convert.ToInt32(recipeAmount) < 0);
+            } while (Int32.TryParse(recipeAmount, out int result) == false || result < 0);
             int amount = Convert.ToInt32(recipeAmount);
             Console.Clear();
             return amount;
@@ -214,7 +214,7 @@ namespace lemonadestand
                 Console.WriteLine("The price of " + item + " is $" + ingredients.price);
                 Console.WriteLine("How many " + item + " do want?");
                 input = Console.ReadLine().ToLower();
-            } while (Int32.TryParse(input, out int result) == false || Convert.ToInt32(input) < 0);
+            } while (Int32.TryParse(input, out int result) == false || result < 0);
             ingredients.amount = Convert.ToInt32(input);
         }
         public static int DaysOfPlaying()
@@ -226,20 +226,20 @@ namespace lemonadestand
             {
                 Console.Clear();
                 Console.WriteLine("Please for the love of coding, just enter a positive number.");
-            } while (Int32.TryParse(days, out int result) == false || Convert.ToInt32(days) < 0);
+            } while (Int32.TryParse(days, out int result) == false || result < 0);
             return Convert.ToInt32(Console.ReadLine());
         }
         public static double GoalToReach()
         {
-            double goal = 0;
+            int goal = 0;
             string response;
             do
             {
                 Console.Clear();
                 Console.WriteLine("Well kid, welcome to the world of capitalism where dreams are made by crushing the lives of others.\nI'm both excited and sad for you as now you can experience all the hardships of life.\nNo more playing in the sandbox, time to get up and shine.\nWith that being said;\nSet a goal for the amount of money you want to make.");
                 response = Console.ReadLine();
-            } while (Double.TryParse(response, out double result) == false || goal < 0);
-            goal = Convert.ToDouble(response);
+            } while (Int32.TryParse(response, out int result) == false || result < 0);
+            goal = Convert.ToInt32(response);
             return goal;
         }
         public static bool OutOfCups(Player player)
