@@ -17,7 +17,8 @@ namespace lemonadestand
             for (int i = 0; i < player.inventory.allItems.Count; i++)
             {
                 double cost = player.inventory.allItems[i].price;
-                UserInterface.HowMuch(player.inventory.allItems[i].name, player.inventory.allItems[i], player, cost);
+                UserInterface.HowMuch(player.inventory.allItems[i].name, player.inventory.allItems[i]);
+                player.CheckCash(player.inventory.allItems[i].amount, cost);
                 if (player.hasEnoughMoney == false)
                 {
                     player.repromptItems.Add(player.inventory.allItems[i]);
@@ -33,7 +34,8 @@ namespace lemonadestand
                 for (int i = 0; i < player.repromptItems.Count; i++)
                 {
                     double cost = player.repromptItems[i].price;
-                    UserInterface.HowMuch(player.repromptItems[i].name, player.repromptItems[i], player, cost);
+                    UserInterface.HowMuch(player.repromptItems[i].name, player.repromptItems[i]);
+                    player.CheckCash(player.repromptItems[i].amount, cost);
                     if (player.hasEnoughMoney == false)
                     {
                         Console.WriteLine("You thought to yourself that it would be better if you don't have any " + player.repromptItems[i].name + ".");

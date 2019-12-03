@@ -8,6 +8,16 @@ namespace lemonadestand
 {
     public static class UserInterface
     {
+        public static int GameMenu()
+        {
+            int response;
+            do
+            {
+                Console.WriteLine("Choose an option to determine what to do:\n1) Restock your inventory\n2) Make lemonade\n3) Start making money\n4) End day");
+                response = Convert.ToInt32(Console.ReadLine());
+            } while (response != 1 && response != 2 && response != 3 && response != 4);
+            return response;
+        }
         public static void CupCharge(Player player)
         {
             string input;
@@ -33,12 +43,25 @@ namespace lemonadestand
                 Console.WriteLine("Would you like to go to the shop?");
                 for (int i = 0; i < item.allItems.Count; i++)
                 {
-                    if (item.allItems[i].amount == 0)
+                    if (item.iceCubes.Count == 0 && item.sugarCubes.Count == 0 && item.cups.Count == 0 || item.lemons.Count == 0)
                     {
-                        Console.WriteLine("You have no " + item.allItems[i].name + " so you would probably need some if you want to make any money.");
+                        Console.WriteLine("You have no" + item.allItems[i].name + " so you would probably need some if you want to make any money.");
                     }
-                    else
+                    else if (item.iceCubes.Count == 0)
                     {
+                        Console.WriteLine("You have no more ice.");
+                    }
+                    else if (item.sugarCubes.Count == 0)
+                    {
+                        Console.WriteLine("You have no sugarcubes.");
+                    }
+                    else if (item.cups.Count == 0)
+                    {
+                        Console.WriteLine("You're out of cups.");
+                    }
+                    else if (item.lemons.Count == 0)
+                    {
+                        Console.WriteLine("No lemons left in your pouch.");
                     }
                 }
                 answer = Console.ReadLine().ToLower();
@@ -53,28 +76,6 @@ namespace lemonadestand
                         break;
                 }
             } while (answer != "yes" && answer != "no");
-        }
-        public static void HowMuch(string item, Item ingredients, Player player, double cost)
-        {
-            string input;
-            bool hasLet;
-            do
-            {
-                Console.Clear();
-                Console.WriteLine("The price of " + item + " is $" + ingredients.price);
-                Console.WriteLine("How many " + item + " do want?");
-                input = Console.ReadLine().ToLower();
-                if (Int32.TryParse(input, out int result) == false || Convert.ToInt32(input) < 0)
-                {
-                    hasLet = false;
-                }
-                else
-                {
-                    hasLet = true;
-                }
-            } while (hasLet == false);
-            ingredients.amount = Convert.ToInt32(input);
-            player.CheckCash(ingredients.amount, cost);
         }
         public static void Name(string yourName)
         {
@@ -202,34 +203,19 @@ namespace lemonadestand
                 Console.WriteLine("Is this how you want your lemonade mix?");
                 response = Console.ReadLine().ToLower();
             } while (response != "yes" && response != "no");
-            switch (response)
-            {
-                case "yes":
-                    RemoveItems(player);
-                    PromptWaterAmount(player);
-                    CupCharge(player);
-                    player.pitcher.DetermineSweetness(player);
-                    player.pitcher.DetermineColdness(player);
-                    break;
-                case "no":
-                    player.recipe.theMix.Clear();
-                    player.inventory.recipeItems.Clear();
-                    //for (int i = 0; i <= player.recipe.theMix.Count; i++)
-                    //{
-                    //    player.recipe.theMix.RemoveAt(0);
-                    //    i = 0;
-                    //}
-                    //for (int j = 0; j <= player.inventory.recipeItems.Count; j++)
-                    //{
-                    //    player.inventory.recipeItems.RemoveAt(0);
-                    //    j = 0;
-                    //}
-                    MakeRecipe(player);
-                    break;
-                default:
-                    break;
-            }
             return response;
+        }
+        public static void HowMuch(string item, Item ingredients)
+        {
+            string input;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("The price of " + item + " is $" + ingredients.price);
+                Console.WriteLine("How many " + item + " do want?");
+                input = Console.ReadLine().ToLower();
+            } while (Int32.TryParse(input, out int result) == false || Convert.ToInt32(input) < 0);
+            ingredients.amount = Convert.ToInt32(input);
         }
         public static int DaysOfPlaying()
         {
@@ -267,33 +253,19 @@ namespace lemonadestand
             }
             return cupsOut;
         }
-        public static bool OutOfLemonade(Player player)
+        public static string OutOfLemonade(Player player)
         {
-            bool drink = false;
+            string response = "";
             if (player.pitcher.lemonadeLeft == 0)
             {
-                string response;
                 do
                 {
                     Console.Clear();
                     Console.WriteLine("You are out of your special lemonade. Would you perhaps like to make more?");
                     response = Console.ReadLine().ToLower();
                 } while (response != "yes" && response != "no");
-                switch (response)
-                {
-                    case "yes":
-                        player.CheckInventory();
-                        player.RemakeRecipe(player);
-                        drink = false;
-                        break;
-                    case "no":
-                        drink = true;
-                        break;
-                    default:
-                        break;
-                }
             }
-            return drink;
+            return response;
         }
         public static void AddItems(int loopAmount, Player player, int currentLoop)
         {
@@ -306,15 +278,15 @@ namespace lemonadestand
         {
             for (int i = 0; i < player.recipe.lemons; i++)
             {
-                player.inventory.lemons.Remove(player.inventory.allItems[0]);
+                player.inventory.lemons.RemoveAt(0);
             }
             for (int j = 0; j < player.recipe.iceCubes; j++)
             {
-                player.inventory.iceCubes.Remove(player.inventory.allItems[1]);
+                player.inventory.iceCubes.RemoveAt(0);
             }
             for (int k = 0; k < player.recipe.sugarCubes; k++)
             {
-                player.inventory.sugarCubes.Remove(player.inventory.allItems[2]);
+                player.inventory.sugarCubes.RemoveAt(0);
             }
         }
         public static void Welcome()
