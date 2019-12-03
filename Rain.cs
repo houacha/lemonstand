@@ -6,19 +6,25 @@ using System.Threading.Tasks;
 
 namespace lemonadestand
 {
-    public class Rain:Weather
+    public class Rain : Weather
     {
         public int percentOfHappening;
-        public bool isRaining = false;
-        public static List<int> listOfPercent = new List<int>() { };
+        public bool isRaining;
+        public static List<int> listOfPercent;
         public Rain()
         {
             name = "rainy";
+            isRaining = false;
+            listOfPercent = new List<int>() { };
         }
         public override void RandomTemp(int rng)
         {
             temp = rng;
 
+        }
+        public override void DetermineCostumers(int rng)
+        {
+            numOfCustomers = rng;
         }
         public void SetPercentRainy(int rng)
         {

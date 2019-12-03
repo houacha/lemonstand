@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace lemonadestand
 {
-    public class Sugar:Item
+    public class Sugar : Item
     {
-        public int sweetness;
+        public double sweetness;
         public Sugar(double price, int spoil, int sweetness)
         {
             this.sweetness = sweetness;

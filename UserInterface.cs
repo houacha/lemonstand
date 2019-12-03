@@ -26,7 +26,7 @@ namespace lemonadestand
         }
         public static void GoToStore(Inventory item, Store store, Player player)
         {
-            string answer = "";
+            string answer;
             do
             {
                 Console.Clear();
@@ -56,16 +56,15 @@ namespace lemonadestand
         }
         public static void HowMuch(string item, Item ingredients, Player player, double cost)
         {
-            string input = "";
-            bool hasLet = false;
-            int result;
+            string input;
+            bool hasLet;
             do
             {
                 Console.Clear();
                 Console.WriteLine("The price of " + item + " is $" + ingredients.price);
                 Console.WriteLine("How many " + item + " do want?");
                 input = Console.ReadLine().ToLower();
-                if (Int32.TryParse(input, out result) == false || Convert.ToInt32(input) < 0)
+                if (Int32.TryParse(input, out int result) == false || Convert.ToInt32(input) < 0)
                 {
                     hasLet = false;
                 }
@@ -77,26 +76,58 @@ namespace lemonadestand
             ingredients.amount = Convert.ToInt32(input);
             player.CheckCash(ingredients.amount, cost);
         }
-        public static void Name(string name)
+        public static void Name(string yourName)
         {
+            Console.Clear();
             Console.WriteLine("What is the name that your mama gave you?");
-            name = Console.ReadLine();
+            yourName = Console.ReadLine();
         }
         public static void PromptWaterAmount(Player player)
         {
             string water;
             do
             {
-            Console.WriteLine("How many cups water would you like to add? Enter a POSITIVE, WHOLE number. If number is less than 4, default will be 4. Can't make lemonade without water.");
-            water = Console.ReadLine();
-            } while (Int32.TryParse(water, out int result) == false || Convert.ToInt32(water) < 0);
-            player.recipe.water = Convert.ToInt32(water);
+                Console.Clear();
+                Console.WriteLine("How many cups water would you like to add? Enter a POSITIVE, WHOLE number. If number is less than 4, default will be 4. Can't make lemonade without water.");
+                water = Console.ReadLine();
+            } while (Int32.TryParse(water, out int result) == false);
+            if (Convert.ToInt32(water) < 4)
+            {
+                player.recipe.water = 4;
+            }
+            else
+            {
+                player.recipe.water = Convert.ToInt32(water);
+            }
+            ConfirmWater(player);
+        }
+        public static void ConfirmWater(Player player)
+        {
+            string response;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Are you sure you want to add " + player.recipe.water + " cups of water?");
+                response = Console.ReadLine().ToLower();
+            } while (response != "yes" && response != "no");
+            switch (response)
+            {
+                case "yes":
+                    break;
+                case "no":
+                    player.recipe.water = 0;
+                    PromptWaterAmount(player);
+                    break;
+                default:
+                    break;
+            }
         }
         public static int PromptMixAmount(string loop)
         {
             string recipeAmount;
             do
             {
+                Console.Clear();
                 Console.WriteLine("How many " + loop + " do you want to put in?");
                 recipeAmount = Console.ReadLine();
             } while (Int32.TryParse(recipeAmount, out int result) == false || Convert.ToInt32(recipeAmount) < 0);
@@ -169,33 +200,100 @@ namespace lemonadestand
                 Console.Clear();
                 Console.WriteLine("You are going to put " + player.recipe.lemons + " lemons, " + player.recipe.sugarCubes + " sugar cubes, and " + player.recipe.iceCubes + " ice cubes into your pitcher.");
                 Console.WriteLine("Is this how you want your lemonade mix?");
-                response = Console.ReadLine();
+                response = Console.ReadLine().ToLower();
             } while (response != "yes" && response != "no");
             switch (response)
             {
                 case "yes":
                     RemoveItems(player);
+                    PromptWaterAmount(player);
                     CupCharge(player);
                     player.pitcher.DetermineSweetness(player);
                     player.pitcher.DetermineColdness(player);
                     break;
                 case "no":
-                    for (int i = 0; i <= player.recipe.theMix.Count; i++)
-                    {
-                        player.recipe.theMix.RemoveAt(0);
-                        i = 0;
-                    }
-                    for (int j = 0; j <= player.inventory.recipeItems.Count; j++)
-                    {
-                        player.inventory.recipeItems.RemoveAt(0);
-                        j = 0;
-                    }
+                    player.recipe.theMix.Clear();
+                    player.inventory.recipeItems.Clear();
+                    //for (int i = 0; i <= player.recipe.theMix.Count; i++)
+                    //{
+                    //    player.recipe.theMix.RemoveAt(0);
+                    //    i = 0;
+                    //}
+                    //for (int j = 0; j <= player.inventory.recipeItems.Count; j++)
+                    //{
+                    //    player.inventory.recipeItems.RemoveAt(0);
+                    //    j = 0;
+                    //}
                     MakeRecipe(player);
                     break;
                 default:
                     break;
             }
             return response;
+        }
+        public static int DaysOfPlaying()
+        {
+            Console.Clear();
+            Console.WriteLine("Maybe playing this game this long wasn't the brightest idea, so how about I let you decide how long you want to play for.");
+            string days = Console.ReadLine();
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Please for the love of coding, just enter a positive number.");
+            } while (Int32.TryParse(days, out int result) == false || Convert.ToInt32(days) < 0);
+            return Convert.ToInt32(Console.ReadLine());
+        }
+        public static double GoalToReach()
+        {
+            double goal = 0;
+            string response;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Well kid, welcome to the world of capitalism where dreams are made by crushing the lives of others.\nI'm both excited and sad for you as now you can experience all the hardships of life.\nNo more playing in the sandbox, time to get up and shine.\nWith that being said;\nSet a goal for the amount of money you want to make.");
+                response = Console.ReadLine();
+            } while (Double.TryParse(response, out double result) == false || goal < 0);
+            goal = Convert.ToDouble(response);
+            return goal;
+        }
+        public static bool OutOfCups(Player player)
+        {
+            bool cupsOut = false;
+            if (player.inventory.cups.Count == 0)
+            {
+                Console.WriteLine("Looks like you're out of cups. Don't really see what more you can do soooooo......");
+                Console.ReadLine();
+                cupsOut = true;
+            }
+            return cupsOut;
+        }
+        public static bool OutOfLemonade(Player player)
+        {
+            bool drink = false;
+            if (player.pitcher.lemonadeLeft == 0)
+            {
+                string response;
+                do
+                {
+                    Console.Clear();
+                    Console.WriteLine("You are out of your special lemonade. Would you perhaps like to make more?");
+                    response = Console.ReadLine().ToLower();
+                } while (response != "yes" && response != "no");
+                switch (response)
+                {
+                    case "yes":
+                        player.CheckInventory();
+                        player.RemakeRecipe(player);
+                        drink = false;
+                        break;
+                    case "no":
+                        drink = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return drink;
         }
         public static void AddItems(int loopAmount, Player player, int currentLoop)
         {
@@ -218,6 +316,17 @@ namespace lemonadestand
             {
                 player.inventory.sugarCubes.Remove(player.inventory.allItems[2]);
             }
+        }
+        public static void Welcome()
+        {
+            Console.WriteLine("Welcome to your very own lemonade start-up business.\n\nYou're playing as a child who has a frivolous spending habit for games in hopes of becoming a pro gamer.\nPay to win is your life motto.\nYour parents are extremely tire of supporting your idiotic dreams.\nThey have told you that they are no longer giving you an allowance after this last one.\nTo make matters worse, they are only giving you a fraction of what you normally receive, WHELP.\nTo maintiain your lifestyle, you decide on the only job that won't break any labor laws.\n\nGOOD LUCK in your endeavors my friend and let's get started.");
+            Console.ReadLine();
+        }
+        public static void StartLemonadestand()
+        {
+            Console.Clear();
+            Console.WriteLine("Alright! All the setup for your lemonadestand is all done; time to start making money.");
+            Console.ReadLine();
         }
     }
 }

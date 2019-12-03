@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace lemonadestand
 {
-    public class Cups:Item
+    public class Cups : Item
     {
         public int ounces;
         public Cups(double price, int spoil, int ounces)

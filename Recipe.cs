@@ -11,8 +11,7 @@ namespace lemonadestand
         public int lemons;
         public int iceCubes;
         public int sugarCubes;
-        public List<string> theMix = new List<string>(){};
-        public double priceOfLemonade;
+        public List<string> theMix = new List<string>() { };
         public int water;
         public void CountItemsInMix()
         {

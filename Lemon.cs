@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace lemonadestand
 {
-    public class Lemon:Item
+    public class Lemon : Item
     {
-        public int sourness;
+        public double sourness;
         public Lemon(double price, int spoil, int sour)
         {
             sourness = sour;

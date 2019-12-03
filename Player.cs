@@ -9,12 +9,13 @@ namespace lemonadestand
     public class Player
     {
         public string name;
-        public Inventory inventory = new Inventory();
-        public Wallet wallet = new Wallet();
-        public Pitcher pitcher = new Pitcher();
-        public Recipe recipe = new Recipe();
-        public bool hasEnoughMoney = true;
-        public List<Item> repromptItems = new List<Item> { };
+        public Inventory inventory;
+        public Wallet wallet;
+        public Pitcher pitcher;
+        public Recipe recipe;
+        public bool hasEnoughMoney;
+        public List<Item> repromptItems;
+        public double goalMoney;
         public void ShowPlayerCash()
         {
             Console.WriteLine("You have this much money. $" + wallet.cash);
@@ -37,9 +38,30 @@ namespace lemonadestand
                 Console.ReadLine();
             }
         }
+        public void RemakeRecipe(Player player)
+        {
+            if (inventory.lemons.Count == 0 || inventory.iceCubes.Count == 0 || inventory.sugarCubes.Count == 0)
+            {
+                Console.WriteLine("You're currently out of one or more items and can't make your recipe.\nTime to pack up for the day.");
+                Console.ReadLine();
+            }
+            else if (inventory.lemons.Count >= recipe.lemons && inventory.iceCubes.Count >= recipe.iceCubes && inventory.sugarCubes.Count >= recipe.sugarCubes)
+            {
+                Console.Clear();
+                UserInterface.RemoveItems(player);
+                pitcher.lemonadeLeft = 64;
+                Console.WriteLine("You just made a new batch of lemanade.");
+                Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine("You don't have enough ingredients for another pitcher of lemonade.\nLet's just hope you didn't miss out on too much profit.");
+                Console.ReadLine();
+            }
+        }
         public void CheckInventory()
         {
-            Console.WriteLine("You look at everyting you just bought and see that you currently have:" + "\n" + inventory.iceCubes.Count + " " + inventory.allItems[1].name);
+            Console.WriteLine("You look at everyting you have and see that you currently have:" + "\n" + inventory.iceCubes.Count + " " + inventory.allItems[1].name);
             Console.WriteLine(inventory.lemons.Count + " " + inventory.allItems[0].name);
             Console.WriteLine(inventory.sugarCubes.Count + " " + inventory.allItems[2].name);
             Console.WriteLine(inventory.cups.Count + " " + inventory.allItems[3].name);
@@ -65,7 +87,7 @@ namespace lemonadestand
                     {
                     }
                 }
-                if (check > 0 && (count - inventory.iceCubes.Count) > 0 )
+                if (check > 0 && (count - inventory.iceCubes.Count) > 0)
                 {
                     Console.WriteLine("While looking through your cooler you realized that " + check + " ice cubes has faded to the aether.");
                 }
@@ -89,11 +111,11 @@ namespace lemonadestand
                     {
                     }
                 }
-                if (check > 0 && (count - inventory.lemons.Count) > 0 )
+                if (check > 0 && (count - inventory.lemons.Count) > 0)
                 {
                     Console.WriteLine("When you were counting your lemons, you were startled by the fact that " + check + " lemons sprouted legs and ran off into the sunset.");
                 }
-                else if (check > 0 && (count -inventory.lemons.Count) == 0)
+                else if (check > 0 && (count - inventory.lemons.Count) == 0)
                 {
                     Console.WriteLine("You look at your inventory and saw that " + check + " lemons looked like they were going roots. You brush off those tandrils and just put them back into your bag.");
                 }
@@ -102,7 +124,13 @@ namespace lemonadestand
         }
         public Player()
         {
-            wallet.cash = 10.00;
+            inventory = new Inventory();
+            wallet = new Wallet();
+            pitcher = new Pitcher();
+            recipe = new Recipe();
+            hasEnoughMoney = true;
+            repromptItems = new List<Item> { };
+            wallet.cash = 20.00;
         }
     }
 }

@@ -8,9 +8,15 @@ namespace lemonadestand
 {
     class Game
     {
+        private Random random;
+        public Game()
+        {
+            random = new Random();
+        }
         public void Run()
         {
-            Day day = new Day();
+            Day day = new Day(random);
+            UserInterface.Welcome();
             UserInterface.Name(day.player1.name);
             day.RunDay();
         }

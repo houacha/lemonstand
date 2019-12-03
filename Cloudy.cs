@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace lemonadestand
 {
-    public class Cloudy:Weather
+    public class Cloudy : Weather
     {
         public Cloudy()
         {
@@ -15,7 +15,10 @@ namespace lemonadestand
         public override void RandomTemp(int rng)
         {
             temp = rng;
-
+        }
+        public override void DetermineCostumers(int rng)
+        {
+            numOfCustomers = rng;
         }
     }
 }

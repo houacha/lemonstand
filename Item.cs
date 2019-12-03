@@ -28,7 +28,7 @@ namespace lemonadestand
                 return almostSpoiled;
             }
             else
-            {            
+            {
                 return 0;
             }
         }
