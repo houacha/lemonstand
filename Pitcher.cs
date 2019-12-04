@@ -16,7 +16,7 @@ namespace lemonadestand
         {
             coldness = 0;
             sweetnessLevel = 0;
-            lemonadeLeft = 64;
+            lemonadeLeft = 0;
         }
         public void DetermineSweetness(Player player)
         {

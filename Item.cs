@@ -19,10 +19,10 @@ namespace lemonadestand
             if (item.spoilage <= 0)
             {
                 spoilCounter++;
-                currentItems.Remove(item);
+                currentItems.RemoveAt(0);
                 return spoilCounter;
             }
-            else if (item.spoilage < 3)
+            else if (item.spoilage < 4 && item.spoilage > 0)
             {
                 almostSpoiled++;
                 return almostSpoiled;

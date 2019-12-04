@@ -78,15 +78,12 @@ namespace lemonadestand
             {
                 count = inventory.iceCubes.Count;
                 int check = 0;
-                for (int i = 0; i < inventory.iceCubes.Count; i++)
+                for (int i = 1; i <= inventory.iceCubes.Count; i++)
                 {
-                    check += inventory.iceCubes[i].Spoiled(inventory.iceCubes[i], inventory.iceCubes);
-                    if (check > 0)
+                    check += inventory.iceCubes[0].Spoiled(inventory.iceCubes[0], inventory.iceCubes);
+                    if (check > 0 && (count - inventory.iceCubes.Count) > 0)
                     {
                         i = 0;
-                    }
-                    else
-                    {
                     }
                 }
                 if (check > 0 && (count - inventory.iceCubes.Count) > 0)
@@ -95,22 +92,19 @@ namespace lemonadestand
                 }
                 else if (check > 0 && (count - inventory.iceCubes.Count) == 0)
                 {
-                    Console.WriteLine("You take a quick peek at your stockpile and notice that " + check + " ice cubes are going to melt soon.");
+                    Console.WriteLine("You take a quick peek at your stockpile and notice that " + check + " ice cubes going to melt soon.");
                 }
             }
             if (inventory.lemons.Count > 0)
             {
                 count = inventory.lemons.Count;
                 int check = 0;
-                for (int l = 0; l < inventory.lemons.Count; l++)
+                for (int l = 1; l <= inventory.lemons.Count; l++)
                 {
-                    check += inventory.lemons[l].Spoiled(inventory.lemons[l], inventory.lemons);
-                    if (check > 0)
+                    check += inventory.lemons[0].Spoiled(inventory.lemons[0], inventory.lemons);
+                    if (check > 0 && (count - inventory.lemons.Count) > 0)
                     {
                         l = 0;
-                    }
-                    else
-                    {
                     }
                 }
                 if (check > 0 && (count - inventory.lemons.Count) > 0)

@@ -18,7 +18,7 @@ namespace lemonadestand
                 Console.WriteLine("Choose an option to determine what to do (enter one of the numbers):");
                 for (int i = 0; i < options.Count; i++)
                 {
-                    Console.WriteLine((i+1)+")"+options[i]);
+                    Console.WriteLine((i + 1) + ")" + options[i]);
                 }
                 response = Console.ReadLine();
             } while (Int32.TryParse(response, out result) == false || result > options.Count || result <= 0);
@@ -149,6 +149,7 @@ namespace lemonadestand
             player.recipe.sugarCubes = 0;
             player.inventory.AddToRecipe();
             Console.WriteLine("Mix your recipe for one pitcher.");
+            Console.ReadLine();
             for (int i = 0; i < player.inventory.recipeItems.Count; i++)
             {
                 if (player.inventory.recipeItems[i] == "lemon")
@@ -198,7 +199,6 @@ namespace lemonadestand
                 }
             }
             player.inventory.recipeItems.Clear();
-            Console.ReadLine();
         }
         public static string ConfirmRecipe(Player player)
         {
@@ -213,17 +213,17 @@ namespace lemonadestand
             } while (response != "yes" && response != "no");
             return response;
         }
-        public static void HowMuch(string item, Item ingredients)
+        public static int HowMuch(Item items)
         {
             string input;
             do
             {
                 Console.Clear();
-                Console.WriteLine("The price of " + item + " is $" + ingredients.price);
-                Console.WriteLine("How many " + item + " do want?");
+                Console.WriteLine("The price of " + items.name + " is $" + items.price);
+                Console.WriteLine("How many " + items.name + " do want?");
                 input = Console.ReadLine().ToLower();
             } while (Int32.TryParse(input, out int result) == false || result < 0);
-            ingredients.amount = Convert.ToInt32(input);
+            return Convert.ToInt32(input);
         }
         public static int DaysOfPlaying()
         {

@@ -18,14 +18,31 @@ namespace lemonadestand
             for (int i = 0; i < player.inventory.allItems.Count; i++)
             {
                 double cost = player.inventory.allItems[i].price;
-                UserInterface.HowMuch(player.inventory.allItems[i].name, player.inventory.allItems[i]);
-                player.CheckCash(player.inventory.allItems[i].amount, cost);
+                int amount = UserInterface.HowMuch(player.inventory.allItems[i]);
+                player.CheckCash(amount, cost);
                 if (player.hasEnoughMoney == false)
                 {
                     repromptItems.Add(player.inventory.allItems[i]);
                 }
                 else
                 {
+                    switch (player.inventory.allItems[i].name)
+                    {
+                        case "lemons":
+                            player.inventory.AddLemons(amount);
+                            break;
+                        case "ice cubes":
+                            player.inventory.AddIce(amount);
+                            break;
+                        case "sugar cubes":
+                            player.inventory.AddSugar(amount);
+                            break;
+                        case "red solo cup":
+                            player.inventory.AddCups(amount);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             if (repromptItems.Count > 0)
@@ -35,29 +52,35 @@ namespace lemonadestand
                 for (int i = 0; i < repromptItems.Count; i++)
                 {
                     double cost = repromptItems[i].price;
-                    UserInterface.HowMuch(repromptItems[i].name, repromptItems[i]);
-                    player.CheckCash(repromptItems[i].amount, cost);
+                    int amount = UserInterface.HowMuch(repromptItems[i]);
+                    player.CheckCash(amount, cost);
                     if (player.hasEnoughMoney == false)
                     {
                         Console.WriteLine("You thought to yourself that it would be better if you don't have any " + repromptItems[i].name + ".");
                         Console.ReadLine();
-                        repromptItems[i].amount = 0;
+                    }
+                    else
+                    {
+                        switch (repromptItems[i].name)
+                        {
+                            case "lemons":
+                                player.inventory.AddLemons(amount);
+                                break;
+                            case "ice cubes":
+                                player.inventory.AddIce(amount);
+                                break;
+                            case "sugar cubes":
+                                player.inventory.AddSugar(amount);
+                                break;
+                            case "red solo cup":
+                                player.inventory.AddCups(amount);
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
-            }
-            else
-            {
-            }
-        }
-        public void AddItems(Player player)
-        {
-            player.inventory.AddIce();
-            player.inventory.AddCups();
-            player.inventory.AddLemons();
-            player.inventory.AddSugar();
-            for (int i = 0; i < player.inventory.allItems.Count; i++)
-            {
-                player.inventory.allItems[i].amount = 0;
+                repromptItems.Clear();
             }
         }
     }

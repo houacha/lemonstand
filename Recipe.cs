@@ -29,9 +29,6 @@ namespace lemonadestand
                 {
                     iceCubes += 1;
                 }
-                else
-                {
-                }
             }
         }
     }
