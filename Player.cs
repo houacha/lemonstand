@@ -14,7 +14,6 @@ namespace lemonadestand
         public Pitcher pitcher;
         public Recipe recipe;
         public bool hasEnoughMoney;
-        public List<Item> repromptItems;
         public double goalMoney;
         public void ShowPlayerCash()
         {
@@ -38,25 +37,28 @@ namespace lemonadestand
                 Console.ReadLine();
             }
         }
-        public void RemakeRecipe(Player player)
+        public bool RemakeRecipe(Player player)
         {
             if (inventory.lemons.Count == 0 || inventory.iceCubes.Count == 0 || inventory.sugarCubes.Count == 0)
             {
                 Console.WriteLine("You're currently out of one or more items and can't make your recipe.\nTime to pack up for the day.");
                 Console.ReadLine();
+                return true;
             }
             else if (inventory.lemons.Count >= recipe.lemons && inventory.iceCubes.Count >= recipe.iceCubes && inventory.sugarCubes.Count >= recipe.sugarCubes)
             {
                 Console.Clear();
-                UserInterface.RemoveItems(player);
+                player.RemoveItems(player);
                 pitcher.lemonadeLeft = 64;
                 Console.WriteLine("You just made a new batch of lemanade.");
                 Console.ReadLine();
+                return false;
             }
             else
             {
                 Console.WriteLine("You don't have enough ingredients for another pitcher of lemonade.\nLet's just hope you didn't miss out on too much profit.");
                 Console.ReadLine();
+                return true;
             }
         }
         public void CheckInventory()
@@ -122,6 +124,28 @@ namespace lemonadestand
             }
             Console.ReadLine();
         }
+        public void AddItems(int loopAmount, Player player, int currentLoop)
+        {
+            for (int j = 0; j < loopAmount; j++)
+            {
+                player.recipe.theMix.Add(player.inventory.recipeItems[currentLoop]);
+            }
+        }
+        public void RemoveItems(Player player)
+        {
+            for (int i = 0; i < player.recipe.lemons; i++)
+            {
+                player.inventory.lemons.RemoveAt(0);
+            }
+            for (int j = 0; j < player.recipe.iceCubes; j++)
+            {
+                player.inventory.iceCubes.RemoveAt(0);
+            }
+            for (int k = 0; k < player.recipe.sugarCubes; k++)
+            {
+                player.inventory.sugarCubes.RemoveAt(0);
+            }
+        }
         public Player()
         {
             inventory = new Inventory();
@@ -129,7 +153,6 @@ namespace lemonadestand
             pitcher = new Pitcher();
             recipe = new Recipe();
             hasEnoughMoney = true;
-            repromptItems = new List<Item> { };
             wallet.cash = 20.00;
         }
     }

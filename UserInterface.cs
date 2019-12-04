@@ -8,15 +8,21 @@ namespace lemonadestand
 {
     public static class UserInterface
     {
-        public static int GameMenu()
+        public static int GameMenu(List<string> options)
         {
-            int response;
+            string response;
+            int result;
             do
             {
-                Console.WriteLine("Choose an option to determine what to do:\n1) Restock your inventory\n2) Make lemonade\n3) Start making money\n4) End day");
-                response = Convert.ToInt32(Console.ReadLine());
-            } while (response != 1 && response != 2 && response != 3 && response != 4);
-            return response;
+                Console.Clear();
+                Console.WriteLine("Choose an option to determine what to do (enter one of the numbers):");
+                for (int i = 0; i < options.Count; i++)
+                {
+                    Console.WriteLine((i+1)+")"+options[i]);
+                }
+                response = Console.ReadLine();
+            } while (Int32.TryParse(response, out result) == false || result > options.Count || result <= 0);
+            return result;
         }
         public static void CupCharge(Player player)
         {
@@ -43,9 +49,9 @@ namespace lemonadestand
                 Console.WriteLine("Would you like to go to the shop?");
                 for (int i = 0; i < item.allItems.Count; i++)
                 {
-                    if (item.iceCubes.Count == 0 && item.sugarCubes.Count == 0 && item.cups.Count == 0 || item.lemons.Count == 0)
+                    if (item.iceCubes.Count == 0 && item.sugarCubes.Count == 0 && item.cups.Count == 0 && item.lemons.Count == 0)
                     {
-                        Console.WriteLine("You have no" + item.allItems[i].name + " so you would probably need some if you want to make any money.");
+                        Console.WriteLine("You have no " + item.allItems[i].name + " so you would probably need some if you want to make any money.");
                     }
                     else if (item.iceCubes.Count == 0)
                     {
@@ -142,7 +148,7 @@ namespace lemonadestand
             player.recipe.iceCubes = 0;
             player.recipe.sugarCubes = 0;
             player.inventory.AddToRecipe();
-            Console.WriteLine("Mix your recipe.");
+            Console.WriteLine("Mix your recipe for one pitcher.");
             for (int i = 0; i < player.inventory.recipeItems.Count; i++)
             {
                 if (player.inventory.recipeItems[i] == "lemon")
@@ -157,7 +163,7 @@ namespace lemonadestand
                             Console.ReadLine();
                         }
                     } while (lemons > player.inventory.lemons.Count);
-                    AddItems(lemons, player, i);
+                    player.AddItems(lemons, player, i);
                     Console.Clear();
                 }
                 else if (player.inventory.recipeItems[i] == "ice")
@@ -172,7 +178,7 @@ namespace lemonadestand
                             Console.ReadLine();
                         }
                     } while (ice > player.inventory.iceCubes.Count);
-                    AddItems(ice, player, i);
+                    player.AddItems(ice, player, i);
                     Console.Clear();
                 }
                 else if (player.inventory.recipeItems[i] == "sugar")
@@ -187,10 +193,12 @@ namespace lemonadestand
                             Console.ReadLine();
                         }
                     } while (sugar > player.inventory.sugarCubes.Count);
-                    AddItems(sugar, player, i);
+                    player.AddItems(sugar, player, i);
                     Console.Clear();
                 }
             }
+            player.inventory.recipeItems.Clear();
+            Console.ReadLine();
         }
         public static string ConfirmRecipe(Player player)
         {
@@ -237,6 +245,7 @@ namespace lemonadestand
             {
                 Console.Clear();
                 Console.WriteLine("Well kid, welcome to the world of capitalism where dreams are made by crushing the lives of others.\nI'm both excited and sad for you as now you can experience all the hardships of life.\nNo more playing in the sandbox, time to get up and shine.\nWith that being said;\nSet a goal for the amount of money you want to make.");
+                Console.Write("$");
                 response = Console.ReadLine();
             } while (Int32.TryParse(response, out int result) == false || result < 0);
             goal = Convert.ToInt32(response);
@@ -266,28 +275,6 @@ namespace lemonadestand
                 } while (response != "yes" && response != "no");
             }
             return response;
-        }
-        public static void AddItems(int loopAmount, Player player, int currentLoop)
-        {
-            for (int j = 0; j < loopAmount; j++)
-            {
-                player.recipe.theMix.Add(player.inventory.recipeItems[currentLoop]);
-            }
-        }
-        public static void RemoveItems(Player player)
-        {
-            for (int i = 0; i < player.recipe.lemons; i++)
-            {
-                player.inventory.lemons.RemoveAt(0);
-            }
-            for (int j = 0; j < player.recipe.iceCubes; j++)
-            {
-                player.inventory.iceCubes.RemoveAt(0);
-            }
-            for (int k = 0; k < player.recipe.sugarCubes; k++)
-            {
-                player.inventory.sugarCubes.RemoveAt(0);
-            }
         }
         public static void Welcome()
         {

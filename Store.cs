@@ -8,9 +8,10 @@ namespace lemonadestand
 {
     public class Store
     {
+        public List<Item> repromptItems;
         public Store()
         {
-
+            repromptItems = new List<Item> { };
         }
         public void BuyStuff(Player player)
         {
@@ -21,26 +22,26 @@ namespace lemonadestand
                 player.CheckCash(player.inventory.allItems[i].amount, cost);
                 if (player.hasEnoughMoney == false)
                 {
-                    player.repromptItems.Add(player.inventory.allItems[i]);
+                    repromptItems.Add(player.inventory.allItems[i]);
                 }
                 else
                 {
                 }
             }
-            if (player.repromptItems.Count > 0)
+            if (repromptItems.Count > 0)
             {
                 Console.WriteLine("You thought it would be a good idea to try and buy less of the items that you put away.");
                 Console.ReadLine();
-                for (int i = 0; i < player.repromptItems.Count; i++)
+                for (int i = 0; i < repromptItems.Count; i++)
                 {
-                    double cost = player.repromptItems[i].price;
-                    UserInterface.HowMuch(player.repromptItems[i].name, player.repromptItems[i]);
-                    player.CheckCash(player.repromptItems[i].amount, cost);
+                    double cost = repromptItems[i].price;
+                    UserInterface.HowMuch(repromptItems[i].name, repromptItems[i]);
+                    player.CheckCash(repromptItems[i].amount, cost);
                     if (player.hasEnoughMoney == false)
                     {
-                        Console.WriteLine("You thought to yourself that it would be better if you don't have any " + player.repromptItems[i].name + ".");
+                        Console.WriteLine("You thought to yourself that it would be better if you don't have any " + repromptItems[i].name + ".");
                         Console.ReadLine();
-                        player.repromptItems[i].amount = 0;
+                        repromptItems[i].amount = 0;
                     }
                 }
             }

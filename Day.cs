@@ -14,60 +14,98 @@ namespace lemonadestand
         public Store store;
         public Random rngNum;
         public List<Customers> customerList;
-        public List<Weather> weathers;
         public List<Weather> forecast;
         public static List<int> forecastTemp;
         public static Cloudy cloudy;
         public static Rain rainy;
         public static Foggy foggy;
         public static Sunny sunny;
-        public int dayCounter;
-        public int totalDays;
-        public int playingDays;
+        public string[] daysOfTheWeek;
+        public List<string> options;
         public int numOfBuyers;
         public bool storeOpened;
-        public bool noCups;
-        public bool noDrink;
-        public string[] daysOfTheWeek;
-        public Day(Random rng)
+        public Day(Random rng, Player player, Store store, Weather weather)
         {
+            player1 = player;
+            numOfBuyers = 0;
+            storeOpened = false;
             rngNum = rng;
-            weather = new Weather();
-            player1 = new Player();
-            store = new Store();
-            dayCounter = 0;
+            this.weather = weather;
+            this.store = store;
             cloudy = new Cloudy();
             rainy = new Rain();
             foggy = new Foggy();
             sunny = new Sunny();
             customerList = new List<Customers>() { };
-            weathers = new List<Weather>() { rainy, sunny, foggy, cloudy };
             forecast = new List<Weather>() { };
             forecastTemp = new List<int>() { };
             daysOfTheWeek = new string[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+            options = new List<string>() { "Restock your inventory", "Check inventory", "End day" };
         }
-        public void GameOptions()
+        private void AddRemoveInGameOptions(List<string> options)
         {
-            switch (UserInterface.GameMenu())
+            options.Remove("End day");
+            options.Add("End day");
+        }
+        private void ResetListOptions()
+        {
+            if (!options.Contains("Check inventory"))
             {
-                case 1:
+                options.Add("Check inventory");
+            }
+            else if (!options.Contains("Restock your inventory"))
+            {
+                options.Add("Restock your inventory");
+            }
+            else if (!options.Contains("End day"))
+            {
+                options.Add("End day");
+            }
+            else if (options.Contains("Make lemonade"))
+            {
+                options.Remove("Make lemonade");
+            }
+            else if (options.Contains("Start making money"))
+            {
+                options.Remove("Start making money");
+            }
+        }
+        public bool GameOptions(int dayCounter)
+        {
+            bool noDrink = false;
+            bool noCups = false;
+            AddRemoveInGameOptions(options);
+            int response = UserInterface.GameMenu(options);
+            string index = options[response - 1];
+            switch (index.ToLower())
+            {
+                case "restock your inventory":
+                    options.Add("Make lemonade");
+                    options.Remove("Restock your inventory");
+                    AddRemoveInGameOptions(options);
                     UserInterface.GoToStore(player1.inventory, store, player1);
                     store.AddItems(player1);
                     player1.CheckInventory();
-                    player1.CheckSpoil();
-                    break;
-                case 2:
+                    return true;
+                case "make lemonade":
+                    options.Add("Start making money");
+                    options.Remove("Make lemonade");
+                    AddRemoveInGameOptions(options);
                     UserInterface.MakeRecipe(player1);
-                    string response;
+                    string answer;
                     do
                     {
-                        response = UserInterface.ConfirmRecipe(player1);
-                        AfterConfirmRecipe(response, player1);
-                    } while (response == "no");
-                    break;
-                case 3:
+                        answer = UserInterface.ConfirmRecipe(player1);
+                        AfterConfirmRecipe(answer, player1);
+                    } while (answer == "no");
+                    return true;
+                case "check inventory":
+                    player1.CheckInventory();
+                    player1.CheckSpoil();
+                    return true;
+                case "start making money":
                     UserInterface.StartLemonadestand();
-                    SetCustomerCount();
+                    SetCustomerCount(dayCounter);
                     for (int i = 0; i < customerList.Count; i++)
                     {
                         noCups = UserInterface.OutOfCups(player1);
@@ -90,9 +128,12 @@ namespace lemonadestand
                         }
                         customers.willBuy = false;
                     }
+                    options.Remove("Start making money");
+                    options.Remove("Make lemonade");
+                    options.Remove("Restock your inventory");
                     storeOpened = true;
-                    break;
-                case 4:
+                    return true;
+                case "end day":
                     double profit = numOfBuyers * player1.pitcher.pricePerCup;
                     player1.wallet.cash += profit;
                     if (noCups == true)
@@ -112,24 +153,18 @@ namespace lemonadestand
                         Console.WriteLine("Today " + customerList.Count + " people came to your rinky-dink stand but only " + numOfBuyers + " people were thirsty enough to try your lemonade.\nYou, however, made $" + profit + ".\nConsider that a win and let's do this again tomorrow.");
                     }
                     Console.ReadLine();
-                    dayCounter++;
-                    totalDays++;
-                    forecast.RemoveAt(0);
-                    if (dayCounter == 6)
-                    {
-                        dayCounter = 0;
-                    }
-                    break;
+                    return false;
                 default:
                     break;
             }
+            return true;
         }
         public void AfterConfirmRecipe(string response, Player player)
         {
             switch (response)
             {
                 case "yes":
-                    UserInterface.RemoveItems(player);
+                    player.RemoveItems(player);
                     UserInterface.PromptWaterAmount(player);
                     UserInterface.CupCharge(player);
                     player.pitcher.DetermineSweetness(player);
@@ -147,12 +182,20 @@ namespace lemonadestand
         public bool AfterOutLemonade(string response, Player player)
         {
             bool drink = false;
+            bool cantMakeMore;
             switch (response)
             {
                 case "yes":
                     player.CheckInventory();
-                    player.RemakeRecipe(player);
-                    drink = false;
+                    cantMakeMore = player.RemakeRecipe(player);
+                    if (cantMakeMore == true)
+                    {
+                        drink = true;
+                    }
+                    else
+                    {
+                        drink = false;
+                    }
                     break;
                 case "no":
                     drink = true;
@@ -235,6 +278,7 @@ namespace lemonadestand
         }
         public void ForecastGen()
         {
+            List<Weather> weathers = new List<Weather>() { rainy, sunny, foggy, cloudy };
             int num;
             for (int i = 0; i < 7; i++)
             {
@@ -257,25 +301,29 @@ namespace lemonadestand
             }
 
         }
-        public void SetCustomerCount()
+        public void SetCustomerCount(int dayCounter)
         {
             switch (forecast[dayCounter].name)
             {
                 case "cloudy":
                     cloudy.DetermineCostumers(rngNum.Next(251));
                     GenerateCustomer(cloudy.numOfCustomers);
+                    cloudy.numOfCustomers = 0;
                     break;
                 case "sunny":
                     sunny.DetermineCostumers(rngNum.Next(501));
                     GenerateCustomer(sunny.numOfCustomers);
+                    sunny.numOfCustomers = 0;
                     break;
                 case "foggy":
                     foggy.DetermineCostumers(rngNum.Next(167));
                     GenerateCustomer(foggy.numOfCustomers);
+                    foggy.numOfCustomers = 0;
                     break;
                 case "rainy":
                     rainy.DetermineCostumers(rngNum.Next(126));
                     GenerateCustomer(rainy.numOfCustomers);
+                    rainy.numOfCustomers = 0;
                     break;
                 default:
                     break;
@@ -291,6 +339,9 @@ namespace lemonadestand
         }
         public void RunDay()
         {
+            int playingDays = 0;
+            int totalDays = 0;
+            int dayCounter = 0;
             player1.goalMoney = UserInterface.GoalToReach();
             if (totalDays == 7 && player1.wallet.cash < (player1.goalMoney / 2))
             {
@@ -301,13 +352,27 @@ namespace lemonadestand
             {
                 if (dayCounter == 0)
                 {
+                    forecast.Clear();
                     ShowForecast();
                 }
                 CurrentDayForecast(dayCounter);
-                storeOpened = false;
                 player1.ShowPlayerCash();
-                GameOptions();
-            } while (player1.goalMoney != player1.wallet.cash || !(player1.wallet.cash == 0 && player1.inventory.iceCubes.Count == 0 && player1.inventory.sugarCubes.Count == 0 && player1.inventory.lemons.Count == 0) || totalDays != playingDays);
+                bool loop;
+                do
+                {
+                    loop = GameOptions(dayCounter);
+                } while (loop == true);
+                ResetListOptions();
+                customerList.Clear();
+                player1.recipe.theMix.Clear();
+                numOfBuyers = 0;
+                dayCounter++;
+                totalDays++;
+                if (dayCounter == 7)
+                {
+                    dayCounter = 0;
+                }
+            } while (player1.goalMoney != player1.wallet.cash && !(player1.wallet.cash == 0 && player1.inventory.iceCubes.Count == 0 && player1.inventory.sugarCubes.Count == 0 && player1.inventory.lemons.Count == 0) && totalDays != playingDays);
         }
     }
 }

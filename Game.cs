@@ -9,15 +9,21 @@ namespace lemonadestand
     class Game
     {
         private Random random;
+        public Player player;
+        public Store store;
+        public Weather weather;
         public Game()
         {
             random = new Random();
+            player = new Player();
+            store = new Store();
+            weather = new Weather();
         }
         public void Run()
         {
-            Day day = new Day(random);
+            Day day = new Day(random, player, store, weather);
             UserInterface.Welcome();
-            UserInterface.Name(day.player1.name);
+            UserInterface.Name(player.name);
             day.RunDay();
         }
     }
